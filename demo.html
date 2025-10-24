@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Strength Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        h3 {
+            color: #666;
+            font-weight: normal;
+            margin-top: 0;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin: 15px 0;
+        }
+        #results {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 4px;
+            display: none;
+        }
+        #results.show {
+            display: block;
+        }
+        .result-item {
+            margin: 12px 0;
+            line-height: 1.6;
+        }
+        .label {
+            font-weight: bold;
+            color: #555;
+        }
+        .math-box {
+            background: #e9ecef;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        .strength {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        .too-weak { background: #ffcccc; color: #cc0000; }
+        .weak { background: #ffe6cc; color: #cc6600; }
+        .medium { background: #ffffcc; color: #cc9900; }
+        .strong { background: #ccffcc; color: #009900; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Password Strength Calculator</h1>
+        <h3>Using Combinatorics to Analyze Password Security</h3>
+        
+        <label for="password">Enter password:</label>
+        <input type="text" id="password" placeholder="Type a password to analyze">
+        
+        <div id="results"></div>
+    </div>
+
+    <script>
+        function analyzePassword(password) {
+            if (!password) return null;
+            
+            // Check what character types are used
+            let charsetSize = 0;
+            let types = [];
+            
+            if (/[a-z]/.test(password)) {
+                charsetSize += 26;
+                types.push('lowercase');
+            }
+            if (/[A-Z]/.test(password)) {
+                charsetSize += 26;
+                types.push('uppercase');
+            }
+            if (/[0-9]/.test(password)) {
+                charsetSize += 10;
+                types.push('numbers');
+            }
+            if (/[^a-zA-Z0-9]/.test(password)) {
+                charsetSize += 32;
+                types.push('symbols');
+            }
+            
+            let length = password.length;
+            let diversity = types.length;
+            
+            // Calculate combinations using N^L
+            let combinations = Math.pow(charsetSize, length);
+            
+            // Estimate time to crack (1 billion attempts per second)
+            let seconds = combinations / 1000000000;
+            let timeStr = formatTime(seconds);
+            
+            // Determine strength
+            let strength = 'Too weak';
+            let strengthClass = 'too-weak';
+            
+            if (diversity >= 4 && length >= 12) {
+                strength = 'Strong';
+                strengthClass = 'strong';
+            } else if (diversity >= 4 && length >= 10) {
+                strength = 'Medium';
+                strengthClass = 'medium';
+            } else if (diversity >= 2 && length >= 8) {
+                strength = 'Weak';
+                strengthClass = 'weak';
+            }
+            
+            return {
+                length: length,
+                types: types,
+                charsetSize: charsetSize,
+                combinations: combinations,
+                timeStr: timeStr,
+                strength: strength,
+                strengthClass: strengthClass
+            };
+        }
+        
+        function formatTime(seconds) {
+            if (seconds < 1) return 'Less than 1 second';
+            if (seconds < 60) return seconds.toFixed(1) + ' seconds';
+            if (seconds < 3600) return (seconds / 60).toFixed(1) + ' minutes';
+            if (seconds < 86400) return (seconds / 3600).toFixed(1) + ' hours';
+            if (seconds < 31536000) return (seconds / 86400).toFixed(0) + ' days';
+            let years = seconds / 31536000;
+            if (years < 1000) return years.toFixed(0) + ' years';
+            return years.toExponential(2) + ' years';
+        }
+        
+        document.getElementById('password').addEventListener('input', function(e) {
+            let password = e.target.value;
+            let resultsDiv = document.getElementById('results');
+            
+            if (!password) {
+                resultsDiv.classList.remove('show');
+                return;
+            }
+            
+            let result = analyzePassword(password);
+            
+            resultsDiv.innerHTML = `
+                <div class="result-item">
+                    <span class="label">Password Length:</span> ${result.length} characters
+                </div>
+                
+                <div class="result-item">
+                    <span class="label">Character Types:</span> ${result.types.join(', ')}
+                </div>
+                
+                <div class="result-item">
+                    <span class="label">Character Set Size (N):</span> ${result.charsetSize}
+                </div>
+                
+                <div class="math-box">
+                    <strong>Combinatorics Calculation (Product Rule):</strong><br><br>
+                    Total Combinations = N^L<br>
+                    = ${result.charsetSize}^${result.length}<br>
+                    = ${result.combinations.toExponential(2)} possible passwords
+                </div>
+                
+                <div class="result-item">
+                    <span class="label">Time to Crack:</span> ${result.timeStr}
+                </div>
+                
+                <div class="result-item">
+                    <span class="label">Strength:</span> 
+                    <span class="strength ${result.strengthClass}">${result.strength}</span>
+                </div>
+                
+                <p style="margin-top: 20px; color: #666; font-size: 14px;">
+                    (Based on 1 billion attempts per second)
+                </p>
+            `;
+            
+            resultsDiv.classList.add('show');
+        });
+    </script>
+</body>
+</html>

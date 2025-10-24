@@ -1,3 +1,16 @@
+/**
+ * Password Strength Calculator
+ * Demonstrates Combinatorics in Password Security
+ * 
+ * Mathematical Concept: Product Rule
+ * If a password has length L and uses character set of size N,
+ * Total possible passwords = N^L
+ * 
+ * Author: Anshum
+ * Course: Mathematics for Computing
+ */
+
+
 import escapeStringRegexp from "escape-string-regexp";
 
 const defaultOptions = [

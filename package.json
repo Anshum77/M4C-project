@@ -1,8 +1,7 @@
 {
-  
-  "name": "check-password-strength",
-  "version": "2.0.7",
-  "description": "A NPM Password strength checker based from Javascript RegExp. Check passphrase if it's \"Too weak\", \"Weak\", \"Medium\" or \"Strong\"",
+  "name": "password-strength-calculator",
+  "version": "1.0.0",
+  "description": "Password strength analysis using combinatorics principles - Product Rule and Character Set Analysis",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -13,35 +12,16 @@
     "test:coverage": "vitest --run --coverage --disable-console-intercept",
     "test:types": "tsd"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/deanilvincent/check-password-strength.git"
-  },
   "keywords": [
-    "npm",
     "password",
     "strength",
-    "checker",
-    "check password strength",
-    "password strength checker",
-    "strength checker",
-    "password checker",
-    "password checker strength",
-    "strength password checker",
-    "check-password-strength",
-    "password-strength-checker",
-    "strength-checker",
-    "password-checker",
-    "password-checker-strength",
-    "strength-password-checker",
-    "pass-strength"
+    "combinatorics",
+    "security",
+    "mathematics",
+    "product-rule"
   ],
-  "author": "deanilvincent",
+  "author": "Anshum",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/deanilvincent/check-password-strength/issues"
-  },
-  "homepage": "https://github.com/deanilvincent/check-password-strength#readme",
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.1",
     "@rollup/plugin-node-resolve": "^15.3.0",
