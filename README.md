@@ -19,9 +19,7 @@ The calculator determines password strength by:
 - 8-char with full keyboard: 94^8 = 6 quadrillion combinations
 
 ## Authors
-[Your Name(s)]
+Anshum
 
 ## Course
-Mathematics for Computing  
-[Your University]  
-October 2025
+Mathematics for Computing
