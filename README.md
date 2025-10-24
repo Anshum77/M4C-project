@@ -18,7 +18,7 @@ The calculator determines password strength by:
 - 8-char lowercase only: 26^8 = 208 billion combinations
 - 8-char with full keyboard: 94^8 = 6 quadrillion combinations
 
-## Authors
+## Author
 Anshum
 
 ## Course
